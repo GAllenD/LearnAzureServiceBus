@@ -11,22 +11,35 @@ namespace LearnAzureServiceBusSender
 {
     public class Publisher
     {
+        public static string TopicName = "SampleTopic";
+
         public void Create()
         {
-            var topicDesc = new TopicDescription("SampleTopic")
+            var topicDesc = new TopicDescription(TopicName)
                 {
                     MaxSizeInMegabytes = 5120,
                     DefaultMessageTimeToLive = new TimeSpan(0, 1, 0)
                 };
+            var connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
 
-            var connString = CloudConfigurationManager.GetSetting("");
+            var namespaceManager = NamespaceManager.CreateFromConnectionString(connectionString);
 
-            var namespaceManager = NamespaceManager.CreateFromConnectionString(connString);
 
-            if (!namespaceManager.TopicExists("SampleTopic"))
+            if (!namespaceManager.TopicExists(TopicName))
             {
                 namespaceManager.CreateTopic(topicDesc);
             }
+            
+        }
+
+        public void SendMessage()
+        {
+            var connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
+            var client = TopicClient.CreateFromConnectionString(connectionString, TopicName);
+
+            var message = new BrokeredMessage("test message");
+
+            client.Send(message);
         }
     }
 }
