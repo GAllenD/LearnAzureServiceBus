@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnAzureServiceBus", "LearnAzureServiceBusSender\LearnAzureServiceBus.csproj", "{AC5A3AC2-0661-4DE9-8A04-492B9A26A586}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBus", "LearnAzureServiceBusSender\ServiceBus.csproj", "{AC5A3AC2-0661-4DE9-8A04-492B9A26A586}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationTier", "PresentationTier\PresentationTier.csproj", "{C0A3F796-287A-49BD-9B7D-022AF5DA47DA}"
 EndProject

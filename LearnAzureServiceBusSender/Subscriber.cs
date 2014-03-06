@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.ServiceBus;
 using Microsoft.WindowsAzure;
 
-namespace LearnAzureServiceBusSender
+namespace ServiceBus
 {
     public class Subscriber
     {

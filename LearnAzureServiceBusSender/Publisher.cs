@@ -7,18 +7,18 @@ using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 using Microsoft.WindowsAzure;
 
-namespace LearnAzureServiceBusSender
+namespace ServiceBus
 {
     public class Publisher
     {
-        public static string TopicName = "SampleTopic";
+        public static string TopicName = "AnotherTopic";
 
-        public void Create()
+        public void CreateTopc()
         {
             var topicDesc = new TopicDescription(TopicName)
                 {
                     MaxSizeInMegabytes = 5120,
-                    DefaultMessageTimeToLive = new TimeSpan(0, 1, 0)
+                    DefaultMessageTimeToLive = new TimeSpan(0, 20, 0)
                 };
             var connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
 
@@ -32,12 +32,12 @@ namespace LearnAzureServiceBusSender
             
         }
 
-        public void SendMessage()
+        public void SendMessage(object messageObject)
         {
             var connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
             var client = TopicClient.CreateFromConnectionString(connectionString, TopicName);
 
-            var message = new BrokeredMessage("test message");
+            var message = new BrokeredMessage(messageObject);
 
             client.Send(message);
         }

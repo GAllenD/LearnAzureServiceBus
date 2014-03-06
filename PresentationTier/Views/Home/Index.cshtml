@@ -1,4 +1,4 @@
-﻿@model dynamic
+﻿@model ServiceBus.Person
 
 @{
     Layout = null;
@@ -7,12 +7,21 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>title</title>
-    </head>
-    <body>
+<head>
+    <title>title</title>
+</head>
+<body>
+    @using (Html.BeginForm("Save", "Home", FormMethod.Post))
+    {
         <div>
-              
+            First Name: @Html.TextBoxFor(m => m.FirstName)
+            <br />
+            Last Name: @Html.TextBoxFor(m => m.LastName)
+            <br />
+            Gender: @Html.DropDownListFor(m => m.Gender, ViewBag.GenderOptions as SelectList)
         </div>
-    </body>
+        <input type="submit" value="Save"/>
+    }
+
+</body>
 </html>
