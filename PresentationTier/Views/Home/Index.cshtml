@@ -14,13 +14,21 @@
     @using (Html.BeginForm("Save", "Home", FormMethod.Post))
     {
         <div>
-            First Name: @Html.TextBoxFor(m => m.FirstName)
-            <br />
-            Last Name: @Html.TextBoxFor(m => m.LastName)
-            <br />
-            Gender: @Html.DropDownListFor(m => m.Gender, ViewBag.GenderOptions as SelectList)
+            <div>
+                First Name: @Html.TextBoxFor(m => m.FirstName)
+            </div>
+            <div>
+                Last Name: @Html.TextBoxFor(m => m.LastName)
+            </div>
+            <div>
+                Gender: @Html.DropDownListFor(m => m.Gender, ViewBag.GenderOptions as SelectList)
+            </div>
+            <div>
+                <label>Publish? @Html.CheckBoxFor(m => m.Publish)</label>
+                <label>Add to Queue? @Html.CheckBoxFor(m => m.PutToQueue)</label>
+            </div>
         </div>
-        <input type="submit" value="Save"/>
+        <input type="submit" value="Go"/>
     }
 
 </body>

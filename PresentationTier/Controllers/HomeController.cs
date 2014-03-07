@@ -10,11 +10,13 @@ namespace PresentationTier.Controllers
 {
     public class HomeController : Controller
     {
-        private Publisher _publisher;
+        private readonly Publisher _publisher;
+        private Messaging _messaging;
 
         public HomeController()
         {
             _publisher = new Publisher();
+            _messaging = new Messaging();
         }
 
         public ActionResult Index()
@@ -26,11 +28,25 @@ namespace PresentationTier.Controllers
 
         public ActionResult Save(Person person)
         {
-            _publisher.CreateTopc();
-
-            _publisher.SendMessage(person);
+            if (person.Publish)
+                SendToTopic(person);    
+            
+            if(person.PutToQueue)
+                SendToQueue(person);
 
             return Index();
+        }
+
+        private void SendToTopic(object message)
+        {
+            _publisher.CreateTopc();
+
+            _publisher.SendMessage(message);
+        }
+
+        private void SendToQueue(object message)
+        {
+            _messaging.AddMessage(message);
         }
     }
 }

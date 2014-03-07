@@ -9,10 +9,8 @@ using Microsoft.WindowsAzure;
 
 namespace ServiceBus
 {
-    public class Publisher
+    public class Publisher : ServiceBusBase
     {
-        public static string TopicName = "AnotherTopic";
-
         public void CreateTopc()
         {
             var topicDesc = new TopicDescription(TopicName)
@@ -20,9 +18,8 @@ namespace ServiceBus
                     MaxSizeInMegabytes = 5120,
                     DefaultMessageTimeToLive = new TimeSpan(0, 20, 0)
                 };
-            var connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
 
-            var namespaceManager = NamespaceManager.CreateFromConnectionString(connectionString);
+            var namespaceManager = NamespaceManager.CreateFromConnectionString(ConnectionString);
 
 
             if (!namespaceManager.TopicExists(TopicName))
@@ -34,12 +31,10 @@ namespace ServiceBus
 
         public void SendMessage(object messageObject)
         {
-            var connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
-            var client = TopicClient.CreateFromConnectionString(connectionString, TopicName);
 
-            var message = new BrokeredMessage(messageObject);
+            var client = TopicClient.CreateFromConnectionString(ConnectionString, TopicName);
 
-            client.Send(message);
+            client.SendAsync(new BrokeredMessage(messageObject));
         }
     }
 }
