@@ -4,25 +4,52 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ServiceBus;
+using Microsoft.ServiceBus.Messaging;
 using Microsoft.WindowsAzure;
 
 namespace ServiceBus
 {
-    public class Subscriber
+    public class Subscriber : ServiceBusBase
     {
-        public void Subscribe()
+        public void CreateSubscription()
         {
-            var topicName = "SampleTopic";
-
-            var connectionString = CloudConfigurationManager.GetSetting("");
+            var connectionString = CloudConfigurationManager.GetSetting(ConnectionString);
 
             var namespaceManager =
                 NamespaceManager.CreateFromConnectionString(connectionString);
 
-            if (!namespaceManager.SubscriptionExists(topicName, "AllMessages"))
+            if (!namespaceManager.SubscriptionExists(TopicName, "GetAll"))
             {
-                namespaceManager.CreateSubscription(topicName, "AllMessages");
+                namespaceManager.CreateSubscription(TopicName, "GetAll");
             }
+        }
+
+        public BrokeredMessage Retrieve()
+        {
+            var client = SubscriptionClient.CreateFromConnectionString(ConnectionString, TopicName, "GetAll");
+
+            client.Receive();
+
+            while (true)
+            {
+                var message = client.Receive();
+
+                if (message == null) continue;
+                try
+                {
+                    return message;
+
+                }
+                catch (Exception)
+                {
+                    message.Abandon();
+                }
+                finally
+                {
+                    message.Complete();
+                }
+            }
+
         }
     }
 }

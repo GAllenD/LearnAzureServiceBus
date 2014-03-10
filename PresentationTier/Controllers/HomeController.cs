@@ -21,18 +21,17 @@ namespace PresentationTier.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.GenderOptions = new SelectList(new List<string> {"Male", "Female"});
 
-            return View(new Person());
+            return View(new Thing());
         }
 
-        public ActionResult Save(Person person)
+        public ActionResult Save(Thing thing)
         {
-            if (person.Publish)
-                SendToTopic(person);    
+            if (thing.Publish)
+                SendToTopic(thing);    
             
-            if(person.PutToQueue)
-                SendToQueue(person);
+            if(thing.PutToQueue)
+                SendToQueue(thing);
 
             return Index();
         }

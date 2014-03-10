@@ -1,4 +1,4 @@
-﻿@model ServiceBus.Person
+﻿@model ServiceBus.Thing
 
 @{
     Layout = null;
@@ -10,26 +10,22 @@
 <head>
     <title>title</title>
 </head>
-<body>
-    @using (Html.BeginForm("Save", "Home", FormMethod.Post))
-    {
-        <div>
+    <body>
+        @using (Html.BeginForm("Save", "Home", FormMethod.Post))
+        {
             <div>
-                First Name: @Html.TextBoxFor(m => m.FirstName)
+                <div>
+                    Name: @Html.TextBoxFor(m => m.Name)
+                </div>
+                <div>
+                    <label>Publish? @Html.CheckBoxFor(m => m.Publish)</label>
+                    <label>Add to Queue? @Html.CheckBoxFor(m => m.PutToQueue)</label>
+                </div>
             </div>
-            <div>
-                Last Name: @Html.TextBoxFor(m => m.LastName)
-            </div>
-            <div>
-                Gender: @Html.DropDownListFor(m => m.Gender, ViewBag.GenderOptions as SelectList)
-            </div>
-            <div>
-                <label>Publish? @Html.CheckBoxFor(m => m.Publish)</label>
-                <label>Add to Queue? @Html.CheckBoxFor(m => m.PutToQueue)</label>
-            </div>
-        </div>
-        <input type="submit" value="Go"/>
-    }
+            <input type="submit" value="Go"/>
+        }
 
-</body>
+    </body>
+
+    
 </html>
