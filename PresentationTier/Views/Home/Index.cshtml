@@ -21,6 +21,9 @@
                     <label>Publish? @Html.CheckBoxFor(m => m.Publish)</label>
                     <label>Add to Queue? @Html.CheckBoxFor(m => m.PutToQueue)</label>
                 </div>
+                <div>
+                    @Html.TextBoxFor(m => m.NumberOfMessages)
+                </div>
             </div>
             <input type="submit" value="Go"/>
         }

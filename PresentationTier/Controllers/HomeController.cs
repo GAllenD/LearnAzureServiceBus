@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using ServiceBus;
 
 namespace PresentationTier.Controllers
@@ -11,7 +6,7 @@ namespace PresentationTier.Controllers
     public class HomeController : Controller
     {
         private readonly Publisher _publisher;
-        private Messaging _messaging;
+        private readonly Messaging _messaging;
 
         public HomeController()
         {
@@ -21,19 +16,23 @@ namespace PresentationTier.Controllers
 
         public ActionResult Index()
         {
-
             return View(new Thing());
         }
 
         public ActionResult Save(Thing thing)
         {
-            if (thing.Publish)
-                SendToTopic(thing);    
-            
-            if(thing.PutToQueue)
-                SendToQueue(thing);
+            for (var i = 0; i < thing.NumberOfMessages + 1; i++)
+            {
+                thing.CurrentSequence++;
+                if (thing.Publish)
+                    SendToTopic(thing);
 
-            return Index();
+                if (thing.PutToQueue)
+                    SendToQueue(thing);    
+            }
+            
+
+            return View("index",new Thing());
         }
 
         private void SendToTopic(object message)

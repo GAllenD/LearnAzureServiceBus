@@ -11,24 +11,29 @@ namespace ServiceBus
 {
     public class Subscriber : ServiceBusBase
     {
+        private readonly NamespaceManager _namespaceManager;
+
+        public Subscriber()
+        {
+            _namespaceManager = NamespaceManager.CreateFromConnectionString(ConnectionString);
+        }
+
+        public void DeleteSubscrtion()
+        {
+            _namespaceManager.DeleteSubscription(TopicName, "GetAll");
+        }
+
         public void CreateSubscription()
         {
-            var connectionString = CloudConfigurationManager.GetSetting(ConnectionString);
-
-            var namespaceManager =
-                NamespaceManager.CreateFromConnectionString(connectionString);
-
-            if (!namespaceManager.SubscriptionExists(TopicName, "GetAll"))
+            if (!_namespaceManager.SubscriptionExists(TopicName, "GetAll"))
             {
-                namespaceManager.CreateSubscription(TopicName, "GetAll");
+                _namespaceManager.CreateSubscription(TopicName, "GetAll");
             }
         }
 
-        public BrokeredMessage Retrieve()
+        public void Retrieve()
         {
             var client = SubscriptionClient.CreateFromConnectionString(ConnectionString, TopicName, "GetAll");
-
-            client.Receive();
 
             while (true)
             {
@@ -37,17 +42,19 @@ namespace ServiceBus
                 if (message == null) continue;
                 try
                 {
-                    return message;
-
+                    var thing = message.GetBody<Thing>();
+                    Console.WriteLine("Object found, messadeId - {0}", message.MessageId);
+                    Console.WriteLine("Object found, correlationID - {0}", message.TimeToLive);
+                    Console.WriteLine("name - {0}", thing.Name);
+                    Console.WriteLine("# - {0}", thing.CurrentSequence);
+                    message.Complete();
                 }
                 catch (Exception)
                 {
                     message.Abandon();
+
                 }
-                finally
-                {
-                    message.Complete();
-                }
+
             }
 
         }
